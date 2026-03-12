@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import type { Spa } from "@/data/mockData";
 import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
