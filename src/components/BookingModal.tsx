@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
-import { X, Lock, CheckCircle2 } from "lucide-react";
+import { X, Lock, CheckCircle2, CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -26,7 +30,7 @@ const BookingModal = ({ isOpen, onClose, preselectedSpa }: BookingModalProps) =>
   const [email, setEmail] = useState("");
   const [selectedSpaId, setSelectedSpaId] = useState(preselectedSpa?.id || "");
   const [selectedServiceId, setSelectedServiceId] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [paymentType, setPaymentType] = useState<"full" | "token">("full");
@@ -137,8 +141,31 @@ const BookingModal = ({ isOpen, onClose, preselectedSpa }: BookingModalProps) =>
           {/* Date & Time */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="date" className="text-sm font-medium">Date *</Label>
-              <Input id="date" type="date" value={date} onChange={e => setDate(e.target.value)} min={new Date().toISOString().split("T")[0]} className="mt-1.5" />
+              <Label className="text-sm font-medium">Date *</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full mt-1.5 justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div>
               <Label className="text-sm font-medium">Time *</Label>
