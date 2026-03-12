@@ -2,92 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
+    --background: 36 33% 5%;
+    --foreground: 40 20% 90%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card: 36 25% 9%;
+    --card-foreground: 40 20% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --popover: 36 25% 9%;
+    --popover-foreground: 40 20% 90%;
 
-    --primary: 150 45% 33%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 37 40% 61%;
+    --primary-foreground: 36 33% 5%;
 
-    --primary-light: 145 30% 95%;
-    --primary-hover: 150 45% 28%;
+    --primary-light: 37 30% 12%;
+    --primary-hover: 37 45% 55%;
 
-    --secondary: 220 9% 46%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 36 15% 20%;
+    --secondary-foreground: 40 20% 90%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 36 15% 12%;
+    --muted-foreground: 36 15% 65%;
 
-    --accent: 145 30% 95%;
-    --accent-foreground: 150 45% 33%;
+    --accent: 37 30% 15%;
+    --accent-foreground: 37 40% 61%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
+    --success: 37 40% 61%;
+    --success-foreground: 36 33% 5%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 150 45% 33%;
+    --border: 37 20% 16%;
+    --input: 37 20% 16%;
+    --ring: 37 40% 61%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 150 45% 33%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 145 30% 95%;
-    --sidebar-accent-foreground: 150 45% 33%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 150 45% 33%;
+    --sidebar-background: 36 25% 7%;
+    --sidebar-foreground: 40 20% 90%;
+    --sidebar-primary: 37 40% 61%;
+    --sidebar-primary-foreground: 36 33% 5%;
+    --sidebar-accent: 37 30% 12%;
+    --sidebar-accent-foreground: 37 40% 61%;
+    --sidebar-border: 37 20% 16%;
+    --sidebar-ring: 37 40% 61%;
 
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Cormorant Garamond', serif;
+    --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
 
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-    --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
-    --shadow-modal: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  }
-
-  .dark {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 150 45% 40%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 150 20% 12%;
-    --primary-hover: 150 45% 35%;
-    --secondary: 220 9% 60%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 220 9% 60%;
-    --accent: 150 20% 12%;
-    --accent-foreground: 150 45% 40%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 95%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 150 45% 40%;
-    --sidebar-background: 0 0% 7%;
-    --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 150 45% 40%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 150 20% 12%;
-    --sidebar-accent-foreground: 150 45% 40%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 150 45% 40%;
+    --shadow-card: 0 2px 8px 0 rgb(0 0 0 / 0.3), 0 1px 3px -1px rgb(0 0 0 / 0.2);
+    --shadow-card-hover: 0 12px 24px -4px rgb(0 0 0 / 0.4), 0 4px 8px -4px rgb(0 0 0 / 0.2);
+    --shadow-modal: 0 24px 48px -8px rgb(0 0 0 / 0.5);
   }
 }
 
@@ -97,47 +66,65 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans);
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
     @apply font-semibold tracking-tight;
   }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--background)); }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--primary)); border-radius: 3px; }
 }
 
 @layer components {
   .spa-card {
-    @apply bg-card rounded-2xl overflow-hidden transition-all duration-300;
+    @apply bg-card rounded-2xl overflow-hidden transition-all duration-300 border border-border;
     box-shadow: var(--shadow-card);
   }
   .spa-card:hover {
     box-shadow: var(--shadow-card-hover);
-    @apply -translate-y-1;
+    @apply -translate-y-1 border-primary/30;
   }
 
   .booking-modal-overlay {
-    @apply fixed inset-0 bg-foreground/50 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+    @apply fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4;
   }
 
   .section-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
+  .gold-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(37 50% 50%) 50%, hsl(var(--primary)) 100%);
+  }
+
   .green-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(150 50% 40%) 100%);
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(37 50% 50%) 100%);
   }
 
   .badge-confirmed {
     @apply bg-accent text-accent-foreground text-xs font-medium px-2.5 py-0.5 rounded-full;
   }
   .badge-pending {
-    @apply bg-yellow-50 text-yellow-700 text-xs font-medium px-2.5 py-0.5 rounded-full;
+    @apply bg-yellow-900/30 text-yellow-400 text-xs font-medium px-2.5 py-0.5 rounded-full;
   }
   .badge-cancelled {
-    @apply bg-red-50 text-red-600 text-xs font-medium px-2.5 py-0.5 rounded-full;
+    @apply bg-red-900/30 text-red-400 text-xs font-medium px-2.5 py-0.5 rounded-full;
   }
   .badge-completed {
     @apply bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded-full;
+  }
+
+  /* Gold text shimmer */
+  .gold-shimmer {
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(37 60% 75%), hsl(var(--primary)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }
