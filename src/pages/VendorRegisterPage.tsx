@@ -13,7 +13,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { DELHI_NCR_AREAS, SERVICE_TYPES, AMENITIES, TIME_SLOTS_30MIN } from "@/data/mockData";
-import { Shield, Lock, Eye } from "lucide-react";
+import { Shield } from "lucide-react";
 
 const VendorRegisterPage = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
