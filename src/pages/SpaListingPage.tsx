@@ -14,6 +14,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SpaCard from "@/components/SpaCard";
+import BookingModal from "@/components/BookingModal";
 import { MOCK_SPAS, DELHI_NCR_AREAS, SERVICE_TYPES } from "@/data/mockData";
 
 const SpaListingPage = () => {
