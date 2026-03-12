@@ -235,29 +235,6 @@ const VendorRegisterPage = () => {
             </div>
           </div>
 
-          {/* USP - Data Privacy & Security */}
-          <div className="border-t border-border pt-5">
-            <div className="bg-primary-light rounded-xl p-5">
-              <h3 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
-                <Shield size={16} className="text-primary" />
-                Your Data is Safe with SpaZen
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-start gap-2">
-                  <Lock size={14} className="text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">No Data Leak:</strong> Your personal & bank details are encrypted and never shared with third parties.</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Eye size={14} className="text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">Customer Privacy:</strong> Customer contact details are only shown for confirmed bookings. No spam, no misuse.</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Shield size={14} className="text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">Secure Payments:</strong> All transactions are processed via Razorpay with bank-grade encryption.</p>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <Button size="lg" className="w-full mt-2">Submit Registration</Button>
 
