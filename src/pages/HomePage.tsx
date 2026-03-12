@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Search, MapPin, Star, Clock, Shield, ChevronRight, ChevronLeft, CheckCircle, DollarSign } from "lucide-react";
+import { Search, MapPin, Star, Clock, Shield, ChevronRight, ChevronLeft, CheckCircle, DollarSign, Lock, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
@@ -267,6 +267,37 @@ const HomePage = () => {
                 <p className="text-sm text-muted-foreground">{item.description}</p>
               </div>
             ))}
+          </div>
+
+          {/* USP - Data Privacy */}
+          <div className="mt-10 bg-background rounded-2xl border border-border p-6 md:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
+            <h3 className="font-bold text-foreground text-lg mb-4 flex items-center gap-2 justify-center">
+              <Shield size={20} className="text-primary" />
+              Your Data is Safe with SpaZen
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-primary-light">
+                <Lock size={18} className="text-primary mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">No Data Leak</p>
+                  <p className="text-xs text-muted-foreground mt-1">Your personal details are encrypted and never shared with third parties.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-primary-light">
+                <Eye size={18} className="text-primary mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">100% Privacy</p>
+                  <p className="text-xs text-muted-foreground mt-1">Your contact info is only shared with confirmed bookings. No spam, ever.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-primary-light">
+                <Shield size={18} className="text-primary mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Secure Payments</p>
+                  <p className="text-xs text-muted-foreground mt-1">All transactions processed via Razorpay with bank-grade encryption.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

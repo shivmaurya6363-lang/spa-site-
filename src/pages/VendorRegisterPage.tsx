@@ -13,7 +13,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { DELHI_NCR_AREAS, SERVICE_TYPES, AMENITIES, TIME_SLOTS_30MIN } from "@/data/mockData";
-import { Shield, Lock, Eye } from "lucide-react";
+import { Shield } from "lucide-react";
 
 const VendorRegisterPage = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
@@ -141,16 +141,28 @@ const VendorRegisterPage = () => {
                     {service}
                   </label>
                   {selectedServices.includes(service) && (
-                    <div className="flex items-center gap-1.5 pl-1">
+                    <div className="flex items-center gap-2 pl-1 flex-wrap">
                       <span className="text-xs text-muted-foreground">₹</span>
                       <Input
                         type="number"
                         placeholder="Price"
                         value={servicePrices[service] || ""}
                         onChange={e => setServicePrices(prev => ({ ...prev, [service]: e.target.value }))}
-                        className="h-8 text-xs w-28"
+                        className="h-8 text-xs w-24"
                       />
-                      <span className="text-xs text-muted-foreground">per session</span>
+                      <Select defaultValue="60">
+                        <SelectTrigger className="h-8 text-xs w-28">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="30">30 min</SelectItem>
+                          <SelectItem value="45">45 min</SelectItem>
+                          <SelectItem value="60">60 min</SelectItem>
+                          <SelectItem value="75">75 min</SelectItem>
+                          <SelectItem value="90">90 min</SelectItem>
+                          <SelectItem value="120">120 min</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   )}
                 </div>
@@ -223,29 +235,6 @@ const VendorRegisterPage = () => {
             </div>
           </div>
 
-          {/* USP - Data Privacy & Security */}
-          <div className="border-t border-border pt-5">
-            <div className="bg-primary-light rounded-xl p-5">
-              <h3 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
-                <Shield size={16} className="text-primary" />
-                Your Data is Safe with SpaZen
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-start gap-2">
-                  <Lock size={14} className="text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">No Data Leak:</strong> Your personal & bank details are encrypted and never shared with third parties.</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Eye size={14} className="text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">Customer Privacy:</strong> Customer contact details are only shown for confirmed bookings. No spam, no misuse.</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Shield size={14} className="text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">Secure Payments:</strong> All transactions are processed via Razorpay with bank-grade encryption.</p>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <Button size="lg" className="w-full mt-2">Submit Registration</Button>
 
