@@ -30,7 +30,7 @@ const BookingModal = ({ isOpen, onClose, preselectedSpa }: BookingModalProps) =>
   const [email, setEmail] = useState("");
   const [selectedSpaId, setSelectedSpaId] = useState(preselectedSpa?.id || "");
   const [selectedServiceId, setSelectedServiceId] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [paymentType, setPaymentType] = useState<"full" | "token">("full");
