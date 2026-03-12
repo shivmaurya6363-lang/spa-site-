@@ -54,6 +54,22 @@ export const SERVICE_TYPES = [
   "Foot Massage", "Head Massage"
 ];
 
+export const AMENITIES = [
+  "AC Rooms", "Private Rooms", "Steam Room", "Sauna", "Jacuzzi",
+  "Shower", "Locker", "Parking", "WiFi", "Changing Room",
+  "Complimentary Drinks", "Music Therapy", "Aromatherapy", "Towels Provided"
+];
+
+export const TIME_SLOTS_30MIN = (() => {
+  const slots: string[] = [];
+  for (let h = 0; h < 24; h++) {
+    for (let m = 0; m < 60; m += 30) {
+      slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+    }
+  }
+  return slots;
+})();
+
 export const MOCK_SPAS: Spa[] = [
   {
     id: "1",
