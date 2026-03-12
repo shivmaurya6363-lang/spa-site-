@@ -351,26 +351,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-14 md:py-20">
-        <div className="section-container">
-          <div className="green-gradient rounded-3xl p-10 md:p-16 text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-white/5 translate-y-1/2 -translate-x-1/2" />
-            <div className="relative z-10">
-              <h2 className="text-2xl md:text-4xl font-bold text-primary-foreground mb-4">Own a Spa in Delhi NCR?</h2>
-              <p className="text-primary-foreground/80 mb-8 max-w-md mx-auto text-base leading-relaxed">
-                List your spa on SpaZen and reach thousands of customers. Join our growing network today.
-              </p>
-              <Link to="/vendor/register">
-                <Button size="lg" variant="secondary" className="bg-background text-primary hover:bg-background/90 font-semibold rounded-xl px-8 h-12 text-base">
-                  Register Your Spa <ArrowRight size={16} className="ml-1" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <Footer />
       <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
