@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Search, MapPin, Star, Clock, Shield, ChevronRight, ChevronLeft, CheckCircle, DollarSign } from "lucide-react";
+import { Search, MapPin, Star, Clock, Shield, ChevronRight, ChevronLeft, CheckCircle, DollarSign, Lock, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
