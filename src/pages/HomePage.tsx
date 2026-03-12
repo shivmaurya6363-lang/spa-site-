@@ -42,6 +42,7 @@ const CITIES = [
 const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingSpa, setBookingSpa] = useState<typeof MOCK_SPAS[0] | undefined>(undefined);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const featuredSpas = MOCK_SPAS.slice(0, 6);
