@@ -32,7 +32,15 @@ const BookingModal = ({ isOpen, onClose, preselectedSpa }: BookingModalProps) =>
   const [paymentType, setPaymentType] = useState<"full" | "token">("full");
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const selectedSpa = MOCK_SPAS.find(s => s.id === selectedSpaId);
+  // Update selectedSpaId when preselectedSpa changes
+  useState(() => {
+    if (preselectedSpa) {
+      setSelectedSpaId(preselectedSpa.id);
+      setSelectedServiceId("");
+    }
+  });
+
+  const selectedSpa = preselectedSpa || MOCK_SPAS.find(s => s.id === selectedSpaId);
   const selectedService = selectedSpa?.services.find(s => s.id === selectedServiceId);
   const totalAmount = selectedService?.price || 0;
   const tokenAmount = 199;
