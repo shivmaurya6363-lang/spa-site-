@@ -130,6 +130,7 @@ const SpaListingPage = () => {
       </div>
 
       <Footer />
+      <BookingModal isOpen={bookingOpen} onClose={() => { setBookingOpen(false); setBookingSpa(undefined); }} preselectedSpa={bookingSpa} />
     </div>
   );
 };
