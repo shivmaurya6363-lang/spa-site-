@@ -55,9 +55,6 @@ const Header = () => {
               <Link to="/spas" className="text-xs font-medium text-muted-foreground hover:text-primary uppercase tracking-wider px-2 py-1.5" onClick={() => setMobileMenuOpen(false)}>Explore</Link>
               <Link to="/my-bookings" className="text-xs font-medium text-muted-foreground hover:text-primary uppercase tracking-wider px-2 py-1.5" onClick={() => setMobileMenuOpen(false)}>My Bookings</Link>
               <div className="flex gap-2 pt-2">
-                <Link to="/vendor/register" className="flex-1">
-                  <Button variant="outline" size="sm" className="w-full text-xs uppercase tracking-wider border-primary/30 text-primary">List Your Spa</Button>
-                </Link>
                 <Link to="/login" className="flex-1">
                   <Button size="sm" className="w-full text-xs uppercase tracking-wider">Book Now</Button>
                 </Link>
