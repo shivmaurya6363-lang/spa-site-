@@ -93,19 +93,28 @@ const BookingModal = ({ isOpen, onClose, preselectedSpa }: BookingModalProps) =>
           </div>
 
           {/* Select Spa */}
-          <div>
-            <Label className="text-sm font-medium">Select Spa *</Label>
-            <Select value={selectedSpaId} onValueChange={(v) => { setSelectedSpaId(v); setSelectedServiceId(""); }}>
-              <SelectTrigger className="mt-1.5">
-                <SelectValue placeholder="Choose a spa" />
-              </SelectTrigger>
-              <SelectContent>
-                {MOCK_SPAS.map(spa => (
-                  <SelectItem key={spa.id} value={spa.id}>{spa.name} — {spa.area}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {!preselectedSpa ? (
+            <div>
+              <Label className="text-sm font-medium">Select Spa *</Label>
+              <Select value={selectedSpaId} onValueChange={(v) => { setSelectedSpaId(v); setSelectedServiceId(""); }}>
+                <SelectTrigger className="mt-1.5">
+                  <SelectValue placeholder="Choose a spa" />
+                </SelectTrigger>
+                <SelectContent>
+                  {MOCK_SPAS.map(spa => (
+                    <SelectItem key={spa.id} value={spa.id}>{spa.name} — {spa.area}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            <div>
+              <Label className="text-sm font-medium">Spa</Label>
+              <div className="mt-1.5 px-3 py-2.5 rounded-md border border-border bg-muted text-sm text-foreground">
+                {preselectedSpa.name} — {preselectedSpa.area}
+              </div>
+            </div>
+          )}
 
           {/* Select Service */}
           {selectedSpa && (
