@@ -12,14 +12,30 @@ import {
 } from "@/components/ui/select";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { DELHI_NCR_AREAS, SERVICE_TYPES } from "@/data/mockData";
+import { DELHI_NCR_AREAS, SERVICE_TYPES, AMENITIES, TIME_SLOTS_30MIN } from "@/data/mockData";
+import { Shield, Lock, Eye } from "lucide-react";
 
 const VendorRegisterPage = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [servicePrices, setServicePrices] = useState<Record<string, string>>({});
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
 
   const toggleService = (service: string) => {
     setSelectedServices(prev =>
       prev.includes(service) ? prev.filter(s => s !== service) : [...prev, service]
+    );
+    if (selectedServices.includes(service)) {
+      setServicePrices(prev => {
+        const updated = { ...prev };
+        delete updated[service];
+        return updated;
+      });
+    }
+  };
+
+  const toggleAmenity = (amenity: string) => {
+    setSelectedAmenities(prev =>
+      prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
     );
   };
 
@@ -33,6 +49,7 @@ const VendorRegisterPage = () => {
         </div>
 
         <div className="bg-card rounded-2xl p-6 md:p-8 border border-border space-y-5" style={{ boxShadow: "var(--shadow-card)" }}>
+          {/* Basic Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label className="text-sm font-medium">Spa Name *</Label>
@@ -73,45 +90,98 @@ const VendorRegisterPage = () => {
               </Select>
             </div>
             <div>
-              <Label className="text-sm font-medium">Google Maps Link *</Label>
+              <Label className="text-sm font-medium">Google Maps Link <span className="text-muted-foreground font-normal">(optional)</span></Label>
               <Input placeholder="Paste Google Maps link" className="mt-1.5" />
             </div>
           </div>
 
+          {/* Timing - 30 min intervals */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label className="text-sm font-medium">Opening Time *</Label>
-              <Input type="time" defaultValue="11:00" className="mt-1.5" />
+              <Select defaultValue="11:00">
+                <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {TIME_SLOTS_30MIN.map(slot => (
+                    <SelectItem key={`open-${slot}`} value={slot}>{slot}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label className="text-sm font-medium">Closing Time *</Label>
-              <Input type="time" defaultValue="22:00" className="mt-1.5" />
+              <Select defaultValue="22:00">
+                <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {TIME_SLOTS_30MIN.map(slot => (
+                    <SelectItem key={`close-${slot}`} value={slot}>{slot}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          {/* Services */}
+          {/* Services with Price */}
           <div>
-            <Label className="text-sm font-medium mb-3 block">Services Offered *</Label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <Label className="text-sm font-medium mb-3 block">Services Offered * <span className="text-muted-foreground font-normal text-xs">(select & set price)</span></Label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {SERVICE_TYPES.map(service => (
+                <div key={service} className="space-y-1.5">
+                  <label
+                    className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer text-xs transition-colors ${
+                      selectedServices.includes(service)
+                        ? "border-primary bg-primary-light text-primary"
+                        : "border-border hover:border-primary/30"
+                    }`}
+                  >
+                    <Checkbox
+                      checked={selectedServices.includes(service)}
+                      onCheckedChange={() => toggleService(service)}
+                    />
+                    {service}
+                  </label>
+                  {selectedServices.includes(service) && (
+                    <div className="flex items-center gap-1.5 pl-1">
+                      <span className="text-xs text-muted-foreground">₹</span>
+                      <Input
+                        type="number"
+                        placeholder="Price"
+                        value={servicePrices[service] || ""}
+                        onChange={e => setServicePrices(prev => ({ ...prev, [service]: e.target.value }))}
+                        className="h-8 text-xs w-28"
+                      />
+                      <span className="text-xs text-muted-foreground">per session</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Amenities */}
+          <div>
+            <Label className="text-sm font-medium mb-3 block">Amenities</Label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {AMENITIES.map(amenity => (
                 <label
-                  key={service}
+                  key={amenity}
                   className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer text-xs transition-colors ${
-                    selectedServices.includes(service)
+                    selectedAmenities.includes(amenity)
                       ? "border-primary bg-primary-light text-primary"
                       : "border-border hover:border-primary/30"
                   }`}
                 >
                   <Checkbox
-                    checked={selectedServices.includes(service)}
-                    onCheckedChange={() => toggleService(service)}
+                    checked={selectedAmenities.includes(amenity)}
+                    onCheckedChange={() => toggleAmenity(amenity)}
                   />
-                  {service}
+                  {amenity}
                 </label>
               ))}
             </div>
           </div>
 
+          {/* Social & Optional */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label className="text-sm font-medium">Instagram Handle</Label>
@@ -125,7 +195,7 @@ const VendorRegisterPage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label className="text-sm font-medium">GST Number (optional)</Label>
+              <Label className="text-sm font-medium">GST Number <span className="text-muted-foreground font-normal">(optional)</span></Label>
               <Input placeholder="Enter GST number" className="mt-1.5" />
             </div>
             <div>
@@ -150,6 +220,30 @@ const VendorRegisterPage = () => {
             <div className="mt-4">
               <Label className="text-sm font-medium">IFSC Code</Label>
               <Input placeholder="Enter IFSC code" className="mt-1.5" />
+            </div>
+          </div>
+
+          {/* USP - Data Privacy & Security */}
+          <div className="border-t border-border pt-5">
+            <div className="bg-primary-light rounded-xl p-5">
+              <h3 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
+                <Shield size={16} className="text-primary" />
+                Your Data is Safe with SpaZen
+              </h3>
+              <div className="space-y-2">
+                <div className="flex items-start gap-2">
+                  <Lock size={14} className="text-primary mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">No Data Leak:</strong> Your personal & bank details are encrypted and never shared with third parties.</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Eye size={14} className="text-primary mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">Customer Privacy:</strong> Customer contact details are only shown for confirmed bookings. No spam, no misuse.</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Shield size={14} className="text-primary mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-muted-foreground"><strong className="text-foreground">Secure Payments:</strong> All transactions are processed via Razorpay with bank-grade encryption.</p>
+                </div>
+              </div>
             </div>
           </div>
 

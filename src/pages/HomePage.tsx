@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Search, MapPin, Star, Clock, Shield, ChevronRight } from "lucide-react";
+import { Search, MapPin, Star, Clock, Shield, ChevronRight, ChevronLeft, CheckCircle, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
@@ -9,17 +9,64 @@ import SpaCard from "@/components/SpaCard";
 import BookingModal from "@/components/BookingModal";
 import { MOCK_SPAS, DELHI_NCR_AREAS } from "@/data/mockData";
 
+import oilMassageImg from "@/assets/categories/oil-massage.jpg";
+import deepTissueImg from "@/assets/categories/deep-tissue.jpg";
+import swedishImg from "@/assets/categories/swedish.jpg";
+import hotStoneImg from "@/assets/categories/hot-stone.jpg";
+import potliImg from "@/assets/categories/potli.jpg";
+import coupleImg from "@/assets/categories/couple.jpg";
+import jacuzziImg from "@/assets/categories/jacuzzi.jpg";
+import facialImg from "@/assets/categories/facial.jpg";
+
+import delhiImg from "@/assets/cities/delhi.jpg";
+import noidaImg from "@/assets/cities/noida.jpg";
+import gurgaonImg from "@/assets/cities/gurgaon.jpg";
+
+const CATEGORIES = [
+  { name: "Oil Massage", image: oilMassageImg },
+  { name: "Deep Tissue", image: deepTissueImg },
+  { name: "Swedish", image: swedishImg },
+  { name: "Hot Stone", image: hotStoneImg },
+  { name: "Potli Massage", image: potliImg },
+  { name: "Couple Massage", image: coupleImg },
+  { name: "Jacuzzi", image: jacuzziImg },
+  { name: "Facial", image: facialImg },
+];
+
+const CITIES = [
+  { name: "Delhi", spas: 18, image: delhiImg },
+  { name: "Noida", spas: 8, image: noidaImg },
+  { name: "Gurgaon", spas: 12, image: gurgaonImg },
+];
+
 const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [bookingOpen, setBookingOpen] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const featuredSpas = MOCK_SPAS.slice(0, 6);
+
+  const scrollCarousel = (direction: "left" | "right") => {
+    if (carouselRef.current) {
+      const scrollAmount = 320;
+      carouselRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const howItWorks = [
     { icon: Search, title: "Search", description: "Find spas near you in Delhi NCR by area or service" },
     { icon: Star, title: "Choose", description: "Compare ratings, prices, and services to pick the perfect spa" },
     { icon: Clock, title: "Book", description: "Select your date, time, and pay securely online" },
     { icon: Shield, title: "Relax", description: "Show up and enjoy your spa session. It's that simple!" },
+  ];
+
+  const whyChoose = [
+    { icon: CheckCircle, title: "Verified Spas", description: "All spa centers are verified and trusted for quality services" },
+    { icon: Clock, title: "Instant Booking", description: "Book your spa appointment in seconds with real-time confirmation" },
+    { icon: DollarSign, title: "Best Prices", description: "Transparent pricing with no hidden charges" },
   ];
 
   const testimonials = [
@@ -78,6 +125,47 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Popular Categories Carousel */}
+      <section className="py-16">
+        <div className="section-container">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary">Popular Categories</h2>
+            <p className="text-muted-foreground mt-2">Book the Best Spas in Delhi NCR</p>
+          </div>
+          <div className="relative">
+            <button
+              onClick={() => scrollCarousel("left")}
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background border border-border shadow-md flex items-center justify-center hover:bg-muted transition-colors"
+            >
+              <ChevronLeft size={20} className="text-primary" />
+            </button>
+            <div
+              ref={carouselRef}
+              className="flex gap-5 overflow-x-auto scrollbar-hide scroll-smooth px-2"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {CATEGORIES.map(cat => (
+                <Link
+                  key={cat.name}
+                  to={`/spas?service=${cat.name}`}
+                  className="flex-shrink-0 w-[280px] h-[320px] rounded-2xl overflow-hidden relative group cursor-pointer"
+                >
+                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <h3 className="absolute bottom-5 left-5 text-lg font-bold text-white">{cat.name}</h3>
+                </Link>
+              ))}
+            </div>
+            <button
+              onClick={() => scrollCarousel("right")}
+              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background border border-border shadow-md flex items-center justify-center hover:bg-muted transition-colors"
+            >
+              <ChevronRight size={20} className="text-primary" />
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Spas */}
       <section className="py-16 bg-muted/50">
         <div className="section-container">
@@ -105,6 +193,42 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Explore Spas by City */}
+      <section className="py-16 bg-primary-light">
+        <div className="section-container">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary">Explore Spas by City</h2>
+            <p className="text-muted-foreground mt-2">Discover the best spa experiences in Delhi NCR</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Info Card */}
+            <div className="bg-background rounded-2xl p-8 flex flex-col justify-center" style={{ boxShadow: "var(--shadow-card)" }}>
+              <h3 className="text-xl md:text-2xl font-bold text-primary mb-3">Book the Best Spa in Delhi NCR</h3>
+              <p className="text-sm text-muted-foreground mb-2">Discover top-rated spa therapies across Delhi, Noida, and Gurgaon.</p>
+              <p className="text-sm text-muted-foreground mb-6">Relax, refresh, and book your next spa session instantly with SpaZen.</p>
+              <Link to="/spas">
+                <Button className="w-fit">Explore Spas Near You</Button>
+              </Link>
+            </div>
+            {/* City Cards */}
+            {CITIES.map(city => (
+              <Link
+                key={city.name}
+                to={`/spas?city=${city.name}`}
+                className="rounded-2xl overflow-hidden relative h-[280px] group cursor-pointer"
+              >
+                <img src={city.image} alt={city.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="absolute bottom-5 left-5">
+                  <h3 className="text-lg font-bold text-white">Book massage in {city.name}</h3>
+                  <p className="text-sm text-primary font-medium">{city.spas} Spas Available</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* How It Works */}
       <section className="py-16">
         <div className="section-container">
@@ -120,6 +244,27 @@ const HomePage = () => {
                 </div>
                 <h3 className="font-semibold text-foreground mb-2">{step.title}</h3>
                 <p className="text-sm text-muted-foreground">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose SpaZen */}
+      <section className="py-16 bg-muted/30">
+        <div className="section-container">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary">Why Choose SpaZen?</h2>
+            <p className="text-muted-foreground mt-2">Experience hassle-free spa booking with our trusted platform</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {whyChoose.map((item, i) => (
+              <div key={i} className="bg-background rounded-2xl p-8 text-center border border-border" style={{ boxShadow: "var(--shadow-card)" }}>
+                <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center mx-auto mb-4">
+                  <item.icon size={24} className="text-primary-foreground" />
+                </div>
+                <h3 className="font-bold text-foreground mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground">{item.description}</p>
               </div>
             ))}
           </div>
