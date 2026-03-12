@@ -33,11 +33,6 @@ const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            <Link to="/vendor/register">
-              <Button variant="outline" size="sm" className="text-xs uppercase tracking-wider border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground">
-                List Your Spa
-              </Button>
-            </Link>
             <Link to="/login">
               <Button size="sm" className="text-xs uppercase tracking-wider">
                 Book Now
