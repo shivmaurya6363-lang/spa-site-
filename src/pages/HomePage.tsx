@@ -282,37 +282,45 @@ const HomePage = () => {
           </div>
 
           {/* USP Strip */}
-          <div className="rounded-2xl border border-primary/20 bg-gradient-to-r from-primary-light via-background to-primary-light p-6 md:p-8">
-            <div className="flex items-center gap-2 justify-center mb-5">
-              <Shield size={20} className="text-primary" />
-              <h3 className="font-bold text-foreground text-lg">Your Data is Safe with SpaZen</h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-background border border-border">
-                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Lock size={16} className="text-primary" />
+          <div className="rounded-3xl green-gradient p-8 md:p-10 relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-white/5 translate-y-1/2 -translate-x-1/2" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-2.5 justify-center mb-7">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                  <Shield size={20} className="text-primary-foreground" />
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">No Data Leak</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Your personal details are encrypted & never shared.</p>
-                </div>
+                <h3 className="font-bold text-primary-foreground text-xl">Your Data is Safe with SpaZen</h3>
               </div>
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-background border border-border">
-                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Eye size={16} className="text-primary" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="flex items-start gap-3 p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/15 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                    <Lock size={18} className="text-primary-foreground" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-primary-foreground">No Data Leak</p>
+                    <p className="text-xs text-primary-foreground/70 mt-1 leading-relaxed">Your personal details are encrypted & never shared with anyone.</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">100% Privacy</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Contact shared only for confirmed bookings. No spam.</p>
+                <div className="flex items-start gap-3 p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/15 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                    <Eye size={18} className="text-primary-foreground" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-primary-foreground">100% Privacy</p>
+                    <p className="text-xs text-primary-foreground/70 mt-1 leading-relaxed">Contact shared only for confirmed bookings. No spam, ever.</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-background border border-border">
-                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Shield size={16} className="text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-foreground">Secure Payments</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Razorpay powered with bank-grade encryption.</p>
+                <div className="flex items-start gap-3 p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/15 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                    <Shield size={18} className="text-primary-foreground" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-primary-foreground">Secure Payments</p>
+                    <p className="text-xs text-primary-foreground/70 mt-1 leading-relaxed">Razorpay powered with bank-grade encryption.</p>
+                  </div>
                 </div>
               </div>
             </div>
