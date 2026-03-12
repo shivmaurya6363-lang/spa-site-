@@ -42,6 +42,7 @@ const CITIES = [
 const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingSpa, setBookingSpa] = useState<typeof MOCK_SPAS[0] | undefined>(undefined);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const featuredSpas = MOCK_SPAS.slice(0, 6);
@@ -193,7 +194,7 @@ const HomePage = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredSpas.map(spa => (
-              <SpaCard key={spa.id} spa={spa} />
+              <SpaCard key={spa.id} spa={spa} onBookNow={(s) => { setBookingSpa(s); setBookingOpen(true); }} />
             ))}
           </div>
           <div className="text-center mt-8 sm:hidden">
@@ -354,7 +355,7 @@ const HomePage = () => {
       </section>
 
       <Footer />
-      <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
+      <BookingModal isOpen={bookingOpen} onClose={() => { setBookingOpen(false); setBookingSpa(undefined); }} preselectedSpa={bookingSpa} />
     </div>
   );
 };

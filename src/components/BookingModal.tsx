@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Lock, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,14 @@ const BookingModal = ({ isOpen, onClose, preselectedSpa }: BookingModalProps) =>
   const [paymentType, setPaymentType] = useState<"full" | "token">("full");
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const selectedSpa = MOCK_SPAS.find(s => s.id === selectedSpaId);
+  useEffect(() => {
+    if (preselectedSpa) {
+      setSelectedSpaId(preselectedSpa.id);
+      setSelectedServiceId("");
+    }
+  }, [preselectedSpa]);
+
+  const selectedSpa = preselectedSpa || MOCK_SPAS.find(s => s.id === selectedSpaId);
   const selectedService = selectedSpa?.services.find(s => s.id === selectedServiceId);
   const totalAmount = selectedService?.price || 0;
   const tokenAmount = 199;
@@ -85,19 +92,28 @@ const BookingModal = ({ isOpen, onClose, preselectedSpa }: BookingModalProps) =>
           </div>
 
           {/* Select Spa */}
-          <div>
-            <Label className="text-sm font-medium">Select Spa *</Label>
-            <Select value={selectedSpaId} onValueChange={(v) => { setSelectedSpaId(v); setSelectedServiceId(""); }}>
-              <SelectTrigger className="mt-1.5">
-                <SelectValue placeholder="Choose a spa" />
-              </SelectTrigger>
-              <SelectContent>
-                {MOCK_SPAS.map(spa => (
-                  <SelectItem key={spa.id} value={spa.id}>{spa.name} — {spa.area}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {!preselectedSpa ? (
+            <div>
+              <Label className="text-sm font-medium">Select Spa *</Label>
+              <Select value={selectedSpaId} onValueChange={(v) => { setSelectedSpaId(v); setSelectedServiceId(""); }}>
+                <SelectTrigger className="mt-1.5">
+                  <SelectValue placeholder="Choose a spa" />
+                </SelectTrigger>
+                <SelectContent>
+                  {MOCK_SPAS.map(spa => (
+                    <SelectItem key={spa.id} value={spa.id}>{spa.name} — {spa.area}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : (
+            <div>
+              <Label className="text-sm font-medium">Spa</Label>
+              <div className="mt-1.5 px-3 py-2.5 rounded-md border border-border bg-muted text-sm text-foreground">
+                {preselectedSpa.name} — {preselectedSpa.area}
+              </div>
+            </div>
+          )}
 
           {/* Select Service */}
           {selectedSpa && (

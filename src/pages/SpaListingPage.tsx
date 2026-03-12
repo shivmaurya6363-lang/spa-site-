@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import type { Spa } from "@/data/mockData";
 import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -13,11 +14,14 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SpaCard from "@/components/SpaCard";
+import BookingModal from "@/components/BookingModal";
 import { MOCK_SPAS, DELHI_NCR_AREAS, SERVICE_TYPES } from "@/data/mockData";
 
 const SpaListingPage = () => {
   const [searchParams] = useSearchParams();
   const initialArea = searchParams.get("area") || "";
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingSpa, setBookingSpa] = useState<Spa | undefined>(undefined);
   const initialQuery = searchParams.get("q") || "";
 
   const [search, setSearch] = useState(initialQuery);
@@ -113,7 +117,7 @@ const SpaListingPage = () => {
         {filteredSpas.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredSpas.map(spa => (
-              <SpaCard key={spa.id} spa={spa} />
+              <SpaCard key={spa.id} spa={spa} onBookNow={(s) => { setBookingSpa(s); setBookingOpen(true); }} />
             ))}
           </div>
         ) : (
@@ -126,6 +130,7 @@ const SpaListingPage = () => {
       </div>
 
       <Footer />
+      <BookingModal isOpen={bookingOpen} onClose={() => { setBookingOpen(false); setBookingSpa(undefined); }} preselectedSpa={bookingSpa} />
     </div>
   );
 };
