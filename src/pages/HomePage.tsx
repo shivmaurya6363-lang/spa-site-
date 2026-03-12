@@ -355,7 +355,7 @@ const HomePage = () => {
       </section>
 
       <Footer />
-      <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
+      <BookingModal isOpen={bookingOpen} onClose={() => { setBookingOpen(false); setBookingSpa(undefined); }} preselectedSpa={bookingSpa} />
     </div>
   );
 };
