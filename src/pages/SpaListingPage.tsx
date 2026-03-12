@@ -20,6 +20,8 @@ import { MOCK_SPAS, DELHI_NCR_AREAS, SERVICE_TYPES } from "@/data/mockData";
 const SpaListingPage = () => {
   const [searchParams] = useSearchParams();
   const initialArea = searchParams.get("area") || "";
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingSpa, setBookingSpa] = useState<Spa | undefined>(undefined);
   const initialQuery = searchParams.get("q") || "";
 
   const [search, setSearch] = useState(initialQuery);
