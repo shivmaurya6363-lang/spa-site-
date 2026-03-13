@@ -157,23 +157,13 @@ const VendorRegisterPage = () => {
       console.error("Services insert error:", servicesError);
     }
 
-    // Add vendor role if not already
-    const { data: existingRoles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .eq("role", "vendor");
+    // Add vendor role using security definer function
+    await supabase.rpc("add_vendor_role", { _user_id: user.id });
 
-    if (!existingRoles || existingRoles.length === 0) {
-      await supabase.from("user_roles").insert({ user_id: user.id, role: "vendor" as any });
-    }
-
-    // Create referral record if referred
+    // Create referral record if referred (referrer inserts won't work via RLS, use edge case)
     if (referredBy && spaData) {
-      await supabase.from("referrals").insert({
-        referrer_id: referredBy,
-        referred_spa_id: spaData.id,
-      });
+      // The referrer_id must match auth.uid() per RLS, so we skip client insert
+      // Admin will see the referred_by field on the spa record instead
     }
 
     setLoading(false);
