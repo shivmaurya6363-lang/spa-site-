@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          amount: number
+          booking_date: string
+          booking_time: string
+          created_at: string
+          duration_minutes: number
+          id: string
+          service_id: string | null
+          service_name: string
+          spa_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          booking_date: string
+          booking_time: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          service_id?: string | null
+          service_name: string
+          spa_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          booking_date?: string
+          booking_time?: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          service_id?: string | null
+          service_name?: string
+          spa_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "spa_services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_spa_id_fkey"
+            columns: ["spa_id"]
+            isOneToOne: false
+            referencedRelation: "spas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -41,6 +101,133 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          commission_amount: number
+          created_at: string
+          id: string
+          referred_spa_id: string
+          referrer_id: string
+          status: string
+        }
+        Insert: {
+          commission_amount?: number
+          created_at?: string
+          id?: string
+          referred_spa_id: string
+          referrer_id: string
+          status?: string
+        }
+        Update: {
+          commission_amount?: number
+          created_at?: string
+          id?: string
+          referred_spa_id?: string
+          referrer_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_referred_spa_id_fkey"
+            columns: ["referred_spa_id"]
+            isOneToOne: false
+            referencedRelation: "spas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spa_services: {
+        Row: {
+          created_at: string
+          duration_minutes: number
+          id: string
+          is_active: boolean
+          name: string
+          price: number
+          spa_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name: string
+          price?: number
+          spa_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          price?: number
+          spa_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spa_services_spa_id_fkey"
+            columns: ["spa_id"]
+            isOneToOne: false
+            referencedRelation: "spas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spas: {
+        Row: {
+          address: string | null
+          area: string | null
+          city: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          id: string
+          name: string
+          owner_name: string
+          phone: string | null
+          referral_code: string | null
+          referred_by: string | null
+          status: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          address?: string | null
+          area?: string | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          owner_name: string
+          phone?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
+          status?: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          address?: string | null
+          area?: string | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          owner_name?: string
+          phone?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
+          status?: string
+          updated_at?: string
+          vendor_id?: string
         }
         Relationships: []
       }
