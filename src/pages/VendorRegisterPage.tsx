@@ -13,12 +13,32 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { DELHI_NCR_AREAS, SERVICE_TYPES, AMENITIES, TIME_SLOTS_30MIN } from "@/data/mockData";
-import { Shield } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+
+interface FormErrors {
+  spaName?: string;
+  ownerName?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  area?: string;
+  services?: string;
+}
 
 const VendorRegisterPage = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [servicePrices, setServicePrices] = useState<Record<string, string>>({});
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [submitted, setSubmitted] = useState(false);
+
+  // Form fields
+  const [spaName, setSpaName] = useState("");
+  const [ownerName, setOwnerName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [area, setArea] = useState("");
 
   const toggleService = (service: string) => {
     setSelectedServices(prev =>
@@ -39,6 +59,63 @@ const VendorRegisterPage = () => {
     );
   };
 
+  const validate = (): FormErrors => {
+    const newErrors: FormErrors = {};
+    if (!spaName.trim()) newErrors.spaName = "Spa name is required";
+    if (!ownerName.trim()) newErrors.ownerName = "Owner name is required";
+    if (!phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^\d{10}$/.test(phone.trim())) {
+      newErrors.phone = "Enter a valid 10-digit number";
+    }
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      newErrors.email = "Enter a valid email address";
+    }
+    if (!address.trim()) newErrors.address = "Address is required";
+    if (!area) newErrors.area = "Please select an area";
+    if (selectedServices.length === 0) newErrors.services = "Select at least one service";
+    return newErrors;
+  };
+
+  const handleSubmit = () => {
+    const validationErrors = validate();
+    setErrors(validationErrors);
+    setSubmitted(true);
+
+    if (Object.keys(validationErrors).length > 0) {
+      // Scroll to first error
+      const firstErrorField = document.querySelector('[data-error="true"]');
+      firstErrorField?.scrollIntoView({ behavior: "smooth", block: "center" });
+      toast({
+        title: "Form incomplete",
+        description: "Please fix the highlighted fields to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check if all selected services have prices
+    const missingPrices = selectedServices.filter(s => !servicePrices[s] || servicePrices[s] === "");
+    if (missingPrices.length > 0) {
+      toast({
+        title: "Prices missing",
+        description: `Please set price for: ${missingPrices.join(", ")}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Registration Submitted! 🎉",
+      description: "We'll review your details and get back to you within 24 hours.",
+    });
+  };
+
+  const errorClass = "border-destructive ring-1 ring-destructive/30";
+  const errorText = "text-destructive text-xs mt-1";
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -51,43 +128,75 @@ const VendorRegisterPage = () => {
         <div className="bg-card rounded-2xl p-6 md:p-8 border border-border space-y-5" style={{ boxShadow: "var(--shadow-card)" }}>
           {/* Basic Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <Label className="text-sm font-medium">Spa Name *</Label>
-              <Input placeholder="Enter spa name" className="mt-1.5" />
+            <div data-error={!!errors.spaName}>
+              <Label className={`text-sm font-medium ${errors.spaName ? "text-destructive" : ""}`}>Spa Name *</Label>
+              <Input
+                placeholder="Enter spa name"
+                className={`mt-1.5 ${errors.spaName ? errorClass : ""}`}
+                value={spaName}
+                onChange={e => { setSpaName(e.target.value); if (submitted) setErrors(prev => ({ ...prev, spaName: e.target.value.trim() ? undefined : prev.spaName })); }}
+              />
+              {errors.spaName && <p className={errorText}>{errors.spaName}</p>}
             </div>
-            <div>
-              <Label className="text-sm font-medium">Owner Name *</Label>
-              <Input placeholder="Enter owner name" className="mt-1.5" />
+            <div data-error={!!errors.ownerName}>
+              <Label className={`text-sm font-medium ${errors.ownerName ? "text-destructive" : ""}`}>Owner Name *</Label>
+              <Input
+                placeholder="Enter owner name"
+                className={`mt-1.5 ${errors.ownerName ? errorClass : ""}`}
+                value={ownerName}
+                onChange={e => { setOwnerName(e.target.value); if (submitted) setErrors(prev => ({ ...prev, ownerName: e.target.value.trim() ? undefined : prev.ownerName })); }}
+              />
+              {errors.ownerName && <p className={errorText}>{errors.ownerName}</p>}
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <Label className="text-sm font-medium">Phone Number *</Label>
-              <Input placeholder="10-digit number" className="mt-1.5" />
+            <div data-error={!!errors.phone}>
+              <Label className={`text-sm font-medium ${errors.phone ? "text-destructive" : ""}`}>Phone Number *</Label>
+              <Input
+                placeholder="10-digit number"
+                className={`mt-1.5 ${errors.phone ? errorClass : ""}`}
+                value={phone}
+                onChange={e => { setPhone(e.target.value); if (submitted) setErrors(prev => ({ ...prev, phone: /^\d{10}$/.test(e.target.value.trim()) ? undefined : prev.phone })); }}
+              />
+              {errors.phone && <p className={errorText}>{errors.phone}</p>}
             </div>
-            <div>
-              <Label className="text-sm font-medium">Email Address *</Label>
-              <Input type="email" placeholder="you@email.com" className="mt-1.5" />
+            <div data-error={!!errors.email}>
+              <Label className={`text-sm font-medium ${errors.email ? "text-destructive" : ""}`}>Email Address *</Label>
+              <Input
+                type="email"
+                placeholder="you@email.com"
+                className={`mt-1.5 ${errors.email ? errorClass : ""}`}
+                value={email}
+                onChange={e => { setEmail(e.target.value); if (submitted) setErrors(prev => ({ ...prev, email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value.trim()) ? undefined : prev.email })); }}
+              />
+              {errors.email && <p className={errorText}>{errors.email}</p>}
             </div>
           </div>
 
-          <div>
-            <Label className="text-sm font-medium">Full Address *</Label>
-            <Input placeholder="Enter full spa address" className="mt-1.5" />
+          <div data-error={!!errors.address}>
+            <Label className={`text-sm font-medium ${errors.address ? "text-destructive" : ""}`}>Full Address *</Label>
+            <Input
+              placeholder="Enter full spa address"
+              className={`mt-1.5 ${errors.address ? errorClass : ""}`}
+              value={address}
+              onChange={e => { setAddress(e.target.value); if (submitted) setErrors(prev => ({ ...prev, address: e.target.value.trim() ? undefined : prev.address })); }}
+            />
+            {errors.address && <p className={errorText}>{errors.address}</p>}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <Label className="text-sm font-medium">Area *</Label>
-              <Select>
-                <SelectTrigger className="mt-1.5"><SelectValue placeholder="Select area" /></SelectTrigger>
+            <div data-error={!!errors.area}>
+              <Label className={`text-sm font-medium ${errors.area ? "text-destructive" : ""}`}>Area *</Label>
+              <Select value={area} onValueChange={val => { setArea(val); if (submitted) setErrors(prev => ({ ...prev, area: undefined })); }}>
+                <SelectTrigger className={`mt-1.5 ${errors.area ? errorClass : ""}`}><SelectValue placeholder="Select area" /></SelectTrigger>
                 <SelectContent>
-                  {DELHI_NCR_AREAS.map(area => (
-                    <SelectItem key={area} value={area}>{area}</SelectItem>
+                  {DELHI_NCR_AREAS.map(a => (
+                    <SelectItem key={a} value={a}>{a}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              {errors.area && <p className={errorText}>{errors.area}</p>}
             </div>
             <div>
               <Label className="text-sm font-medium">Google Maps Link <span className="text-muted-foreground font-normal">(optional)</span></Label>
@@ -95,7 +204,7 @@ const VendorRegisterPage = () => {
             </div>
           </div>
 
-          {/* Timing - 30 min intervals */}
+          {/* Timing */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label className="text-sm font-medium">Opening Time *</Label>
@@ -122,9 +231,12 @@ const VendorRegisterPage = () => {
           </div>
 
           {/* Services with Price */}
-          <div>
-            <Label className="text-sm font-medium mb-3 block">Services Offered * <span className="text-muted-foreground font-normal text-xs">(select & set price)</span></Label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div data-error={!!errors.services}>
+            <Label className={`text-sm font-medium mb-3 block ${errors.services ? "text-destructive" : ""}`}>
+              Services Offered * <span className="text-muted-foreground font-normal text-xs">(select & set price)</span>
+            </Label>
+            {errors.services && <p className={`${errorText} mb-2`}>{errors.services}</p>}
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-3 ${errors.services ? "rounded-lg border border-destructive/30 p-3" : ""}`}>
               {SERVICE_TYPES.map(service => (
                 <div key={service} className="space-y-1.5">
                   <label
@@ -136,7 +248,7 @@ const VendorRegisterPage = () => {
                   >
                     <Checkbox
                       checked={selectedServices.includes(service)}
-                      onCheckedChange={() => toggleService(service)}
+                      onCheckedChange={() => { toggleService(service); if (submitted) setErrors(prev => ({ ...prev, services: undefined })); }}
                     />
                     {service}
                   </label>
@@ -235,8 +347,7 @@ const VendorRegisterPage = () => {
             </div>
           </div>
 
-
-          <Button size="lg" className="w-full mt-2">Submit Registration</Button>
+          <Button size="lg" className="w-full mt-2" onClick={handleSubmit}>Submit Registration</Button>
 
           <p className="text-xs text-center text-muted-foreground">
             By registering, you agree to SpaZen's Terms of Service and Privacy Policy.
