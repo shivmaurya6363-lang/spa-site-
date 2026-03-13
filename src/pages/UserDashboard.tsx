@@ -1,28 +1,49 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CalendarCheck, Heart, Clock, User } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { CalendarCheck, Heart, Clock, User, IndianRupee } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const upcomingBookings = [
-  { spa: "Tranquil Touch Spa", service: "Oil Massage", date: "Mar 18, 2026", time: "3:00 PM", status: "confirmed" },
-  { spa: "Zen Retreat", service: "Facial", date: "Mar 22, 2026", time: "11:00 AM", status: "confirmed" },
-];
-
-const pastBookings = [
-  { spa: "Royal Spa", service: "Swedish Massage", date: "Mar 5, 2026", time: "2:00 PM", amount: "₹2,500", rating: 4.5 },
-  { spa: "Bliss Spa", service: "Deep Tissue", date: "Feb 20, 2026", time: "4:00 PM", amount: "₹3,200", rating: 5 },
-  { spa: "Tranquil Touch Spa", service: "Couple Massage", date: "Feb 10, 2026", time: "6:00 PM", amount: "₹5,000", rating: 4 },
-];
+const statusColor: Record<string, string> = {
+  confirmed: "bg-primary/20 text-primary border-primary/30",
+  pending: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  completed: "bg-green-500/20 text-green-400 border-green-500/30",
+  cancelled: "bg-destructive/20 text-destructive border-destructive/30",
+};
 
 const UserDashboard = () => {
   const { user, loading, signOut } = useAuth();
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [profile, setProfile] = useState<any>(null);
+  const [dataLoading, setDataLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+    const fetch = async () => {
+      setDataLoading(true);
+      const [bRes, pRes] = await Promise.all([
+        supabase.from("bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("profiles").select("*").eq("user_id", user.id).maybeSingle(),
+      ]);
+      setBookings((bRes.data as any[]) || []);
+      setProfile(pRes.data);
+      setDataLoading(false);
+    };
+    fetch();
+  }, [user]);
 
   if (loading) return <div className="min-h-screen bg-background flex items-center justify-center"><p className="text-muted-foreground">Loading...</p></div>;
   if (!user) return <Navigate to="/login" replace />;
+
+  const upcoming = bookings.filter(b => b.status === "confirmed" || b.status === "pending");
+  const completed = bookings.filter(b => b.status === "completed");
+  const totalSpent = completed.reduce((s, b) => s + Number(b.amount), 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -43,80 +64,69 @@ const UserDashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Card className="bg-card border-border">
             <CardContent className="p-4 text-center">
               <CalendarCheck className="w-6 h-6 text-primary mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">2</p>
+              <p className="text-2xl font-bold text-foreground">{upcoming.length}</p>
               <p className="text-xs text-muted-foreground">Upcoming</p>
             </CardContent>
           </Card>
           <Card className="bg-card border-border">
             <CardContent className="p-4 text-center">
               <Clock className="w-6 h-6 text-primary mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">5</p>
+              <p className="text-2xl font-bold text-foreground">{bookings.length}</p>
               <p className="text-xs text-muted-foreground">Total Bookings</p>
             </CardContent>
           </Card>
           <Card className="bg-card border-border">
             <CardContent className="p-4 text-center">
               <Heart className="w-6 h-6 text-primary mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">3</p>
-              <p className="text-xs text-muted-foreground">Favorites</p>
+              <p className="text-2xl font-bold text-foreground">{completed.length}</p>
+              <p className="text-xs text-muted-foreground">Completed</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-card border-border">
+            <CardContent className="p-4 text-center">
+              <IndianRupee className="w-6 h-6 text-primary mx-auto mb-2" />
+              <p className="text-2xl font-bold text-foreground">₹{totalSpent.toLocaleString("en-IN")}</p>
+              <p className="text-xs text-muted-foreground">Total Spent</p>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Upcoming */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Upcoming Bookings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {upcomingBookings.map((b, i) => (
-                  <div key={i} className="p-3 rounded-lg bg-muted/50 border border-border">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-sm font-medium text-foreground">{b.spa}</p>
-                        <p className="text-xs text-muted-foreground">{b.service}</p>
-                      </div>
-                      <Badge variant="outline" className="text-[10px] bg-primary/20 text-primary border-primary/30">{b.status}</Badge>
-                    </div>
-                    <p className="text-xs text-primary mt-2">{b.date} · {b.time}</p>
-                  </div>
+        <Card className="bg-card border-border">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">All Bookings</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Service</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Time</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {bookings.length === 0 && (
+                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-8">No bookings yet. <Link to="/spas" className="text-primary underline">Browse spas</Link></TableCell></TableRow>
+                )}
+                {bookings.map(b => (
+                  <TableRow key={b.id}>
+                    <TableCell className="font-medium">{b.service_name}</TableCell>
+                    <TableCell>{b.booking_date}</TableCell>
+                    <TableCell>{b.booking_time}</TableCell>
+                    <TableCell>₹{Number(b.amount).toLocaleString("en-IN")}</TableCell>
+                    <TableCell><Badge variant="outline" className={`text-[10px] ${statusColor[b.status]}`}>{b.status}</Badge></TableCell>
+                  </TableRow>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Past */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Past Bookings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {pastBookings.map((b, i) => (
-                  <div key={i} className="p-3 rounded-lg bg-muted/50 border border-border">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-sm font-medium text-foreground">{b.spa}</p>
-                        <p className="text-xs text-muted-foreground">{b.service} · {b.date}</p>
-                      </div>
-                      <p className="text-sm font-semibold text-foreground">{b.amount}</p>
-                    </div>
-                    <div className="flex items-center gap-1 mt-1">
-                      {"★".repeat(Math.floor(b.rating))}
-                      <span className="text-xs text-muted-foreground ml-1">{b.rating}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
       <Footer />
     </div>
