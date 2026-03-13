@@ -1,10 +1,19 @@
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, hasRole, signOut } = useAuth();
+
+  const getDashboardLink = () => {
+    if (hasRole("admin")) return "/admin";
+    if (hasRole("vendor")) return "/vendor/dashboard";
+    if (user) return "/dashboard";
+    return "/login";
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-xl border-b border-primary/10">
@@ -33,11 +42,24 @@ const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            <Link to="/login">
-              <Button size="sm" className="text-xs uppercase tracking-wider">
-                Book Now
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <Link to={getDashboardLink()}>
+                  <Button variant="outline" size="sm" className="text-xs uppercase tracking-wider">
+                    Dashboard
+                  </Button>
+                </Link>
+                <Button variant="ghost" size="sm" onClick={signOut} className="text-muted-foreground">
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </>
+            ) : (
+              <Link to="/login">
+                <Button size="sm" className="text-xs uppercase tracking-wider">
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
 
           <button
@@ -55,9 +77,20 @@ const Header = () => {
               <Link to="/spas" className="text-xs font-medium text-muted-foreground hover:text-primary uppercase tracking-wider px-2 py-1.5" onClick={() => setMobileMenuOpen(false)}>Explore</Link>
               <Link to="/my-bookings" className="text-xs font-medium text-muted-foreground hover:text-primary uppercase tracking-wider px-2 py-1.5" onClick={() => setMobileMenuOpen(false)}>My Bookings</Link>
               <div className="flex gap-2 pt-2">
-                <Link to="/login" className="flex-1">
-                  <Button size="sm" className="w-full text-xs uppercase tracking-wider">Book Now</Button>
-                </Link>
+                {user ? (
+                  <>
+                    <Link to={getDashboardLink()} className="flex-1" onClick={() => setMobileMenuOpen(false)}>
+                      <Button size="sm" className="w-full text-xs uppercase tracking-wider">Dashboard</Button>
+                    </Link>
+                    <Button size="sm" variant="outline" onClick={() => { signOut(); setMobileMenuOpen(false); }}>
+                      <LogOut className="w-4 h-4" />
+                    </Button>
+                  </>
+                ) : (
+                  <Link to="/login" className="flex-1" onClick={() => setMobileMenuOpen(false)}>
+                    <Button size="sm" className="w-full text-xs uppercase tracking-wider">Login</Button>
+                  </Link>
+                )}
               </div>
             </nav>
           </div>
